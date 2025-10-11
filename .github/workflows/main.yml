@@ -1,21 +1,13 @@
-on:
-  push:
-    branches:
-    - main
-
+name: learn-github-actions
+run-name: ${{ github.actor }} is learning GitHub Actions
+on: [push]
 jobs:
-  test:
-    name: Test on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        # node_version: ['18.x', '20.x']  # TODO: python versions
-        os: [ubuntu-latest, windows-latest, macOS-latest]
-
+  check-bats-version:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: npm install, build and test
-      run: |
-        curl -LsSf https://astral.sh/uv/install.sh | sh
-        uv run pytest
-  
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install -g bats
+      - run: bats -v
