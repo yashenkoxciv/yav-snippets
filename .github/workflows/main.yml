@@ -2,7 +2,8 @@ name: tests-and-package-build
 on: [push]
 
 env:
-  PYTHONPATH: "${PYTHONPATH}:./src"
+  # PYTHONPATH: "${PYTHONPATH}:./src"
+  PYTHONPATH: "${PYTHONPATH}:./"
 
 jobs:
   test:
