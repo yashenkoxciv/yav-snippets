@@ -1,0 +1,34 @@
+name: tests-and-package-build
+on: [push]
+
+env:
+  PYTHONPATH: "${PYTHONPATH}:./:./src"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.11", "3.12", "3.13", "pypy3.11"]
+    
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+      
+      - run: uv python pin ${{ matrix.python-version }}
+      - name: Display Python version
+        run: uv run python --version
+      
+      - run: uv run ruff check
+      - run: uv run ruff format
+      - run: uv run pytest
+      

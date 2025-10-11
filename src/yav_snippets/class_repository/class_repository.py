@@ -1,3 +1,4 @@
+import os
 import glob
 from os.path import basename, isfile, join
 
@@ -32,11 +33,11 @@ class ClassRepository:
 
     @staticmethod
     def _load_classes(classes_dir: str):
-        class_root = classes_dir.replace("/", ".")
+        class_root = classes_dir.replace(os.sep, ".")
         if class_root[-1] != ".":
             class_root = class_root + "."
 
-        cur_dir = join(classes_dir + "/", "*.py")
+        cur_dir = join(classes_dir + os.sep, "*.py")
         classes_files = glob.glob(cur_dir)
 
         py_modules = []
