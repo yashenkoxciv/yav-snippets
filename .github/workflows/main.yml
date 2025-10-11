@@ -1,0 +1,21 @@
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # node_version: ['18.x', '20.x']  # TODO: python versions
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: npm install, build and test
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        uv run pytest
+  
