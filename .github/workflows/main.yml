@@ -13,14 +13,15 @@ jobs:
     
     steps:
       - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
       - name: Display Python version
         run: uv run python --version
+      - run: uv python list --only-installed
       - run: uv run ruff check
       - run: uv run ruff format
       - run: uv run pytest
