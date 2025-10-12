@@ -56,4 +56,4 @@ model_a_class = cr['model_a']
 len(cr) 
 ```
 
-Class Repository class [tests](tests\class_repository\test_class_repository.py) can be an example.
+Class Repository class [tests](../src/tests/class_repository/test_class_repository.py) can be an example.
