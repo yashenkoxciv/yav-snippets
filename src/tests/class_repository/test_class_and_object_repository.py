@@ -1,5 +1,5 @@
 import pytest
-from yav_snippets import ClassRepository, ClassRepositoryArtifact
+from yav_snippets import ClassRepository, ClassRepositoryArtifact, ObjectRepository
 from yav_snippets.class_repository.class_repository import TagDuplicationException
 
 
@@ -54,3 +54,39 @@ def test_get_class_by_tag(class_repository):
     foo_class = class_repository["bar"]
 
     assert foo_class is Foo
+
+
+def test_yield_tags_and_classes(class_repository):
+    class CatA(ClassRepositoryArtifact):
+        TAG = "cat-a"
+    
+    class CatB(ClassRepositoryArtifact):
+        TAG = "cat-b"
+    
+    class CatC(ClassRepositoryArtifact):
+        TAG = "cat-c"
+
+    tags, classes = list(zip(*class_repository))
+
+    assert set(tags) == {"cat-a", "cat-b", "cat-c"}
+    assert set(classes) == {CatA, CatB, CatC}
+
+
+def test_get_object_repository(class_repository):
+    class CatA(ClassRepositoryArtifact):
+        TAG: str = "cat-a"
+
+        def __str__(self) -> str:
+            return f"{self.TAG}:instance"
+    
+    class CatB(CatA):
+        TAG: str = "cat-b"
+    
+    objr = ObjectRepository(class_repository)
+
+    tags, objs = list(zip(*objr))
+    objs_strs = [str(obj) for obj in objs]
+
+    assert set(tags) == {"cat-a", "cat-b"}
+    assert set(objs_strs) == {"cat-a:instance", "cat-b:instance"}
+

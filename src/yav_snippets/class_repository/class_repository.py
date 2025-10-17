@@ -1,5 +1,6 @@
 import os
 import glob
+from typing import Generator, Tuple, Hashable
 from os.path import basename, isfile, join
 
 
@@ -54,3 +55,7 @@ class ClassRepository:
 
     def __len__(self):
         return len(self.__tag_to_class)
+    
+    def __iter__(self) -> Generator[Tuple[Hashable, type], None, None]:
+        for tag, class_obj in self.__tag_to_class.items():
+            yield tag, class_obj
